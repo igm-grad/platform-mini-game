@@ -187,8 +187,6 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 4294967039
-  groundColliders:
-  - {fileID: 0}
 --- !u!50 &133571831
 Rigidbody2D:
   m_ObjectHideFlags: 0

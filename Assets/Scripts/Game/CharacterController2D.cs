@@ -1,26 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+/// <summary>
+/// References:
+/// https://unity3d.com/pt/learn/tutorials/modules/beginner/2d/2d-controllers
+/// </summary>
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterController2D : MonoBehaviour {
 
     public float speed = 5f;
+    public float gripTime = .5f;
     public LayerMask groundLayers;
-    public Collider2D[] groundColliders = new Collider2D[1];
-
+    public LayerMask wallLayers;
+    
     readonly Vector2 feetA = new Vector2(-.25f,  .05f);
     readonly Vector2 feetB = new Vector2( .25f, -.01f);
 
     bool isGrounded;
+    bool isGripping;
     bool hasDoubleJump;
+
+    Collider2D[] dumbColliders = new Collider2D[1];
+
 
 	void FixedUpdate () 
     {
 
         var pos = (Vector2)transform.position;
-        isGrounded = Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, groundColliders, groundLayers) > 0;
 
-        if (isGrounded)
+        isGrounded = Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, groundLayers) > 0;
+        isGripping = !isGrounded && Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, wallLayers) > 0;
+
+        if (isGrounded || isGripping)
         {
             hasDoubleJump = true;
         }
@@ -32,7 +45,12 @@ public class CharacterController2D : MonoBehaviour {
 
     void Update()
     {
-        if ((isGrounded || hasDoubleJump) && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            World.ShiftDimension();
+        }
+
+        if ((isGrounded || hasDoubleJump) && Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (!isGrounded)
             {
@@ -40,7 +58,7 @@ public class CharacterController2D : MonoBehaviour {
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             }
 
-            rigidbody2D.AddRelativeForce(new Vector2(0, 700));
+            rigidbody2D.AddForce(new Vector2(0, 700));
         }
 
     }
