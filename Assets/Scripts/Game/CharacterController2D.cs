@@ -34,6 +34,15 @@ public class CharacterController2D : GameBehaviour {
         var pos = (Vector2)transform.position;
 
         isGrounded = Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, groundLayers) > 0;
+        if(isGrounded)
+        {
+            transform.parent = dumbColliders[0].transform;
+        }
+        else
+        {
+            transform.parent = null;
+        }
+
         isGripping = !isGrounded && Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, wallLayers) > 0;
 
         if (isGrounded || isGripping)
@@ -52,11 +61,13 @@ public class CharacterController2D : GameBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            transform.parent = null;
             World.ShiftTo(Dimensions.Red);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            transform.parent = null;
             World.ShiftTo(Dimensions.Green);
         }
 
