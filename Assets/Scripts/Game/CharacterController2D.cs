@@ -45,10 +45,16 @@ public class CharacterController2D : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            World.ShiftDimension();
+            World.ShiftTo(Dimensions.Red);
         }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            World.ShiftTo(Dimensions.Green);
+        }
+
 
         if ((isGrounded || hasDoubleJump) && Input.GetKeyDown(KeyCode.UpArrow))
         {
