@@ -91,10 +91,15 @@ public class CharacterController2D : GameBehaviour {
 
     public void Interact(GameBehaviour behaviour)
     {
-        if (behaviour.GetType() == typeof(Spike))
-        {
-            World.LoadCheckpoint();
-        }
+		if (behaviour.GetType() == typeof(Spike))
+		{
+			World.LoadCheckpoint();
+		}
+
+		if (behaviour.GetType() == typeof(FallingPlatform))
+		{
+			World.LoadCheckpoint();
+		}
     }
 
     void OnDrawGizmos()
