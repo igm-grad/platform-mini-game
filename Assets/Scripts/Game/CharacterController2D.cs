@@ -8,7 +8,7 @@ using System.Collections;
 /// </summary>
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class CharacterController2D : MonoBehaviour {
+public class CharacterController2D : GameBehaviour {
 
     public float speed = 5f;
     public float gripTime = .5f;
@@ -22,11 +22,14 @@ public class CharacterController2D : MonoBehaviour {
     bool isGripping;
     bool hasDoubleJump;
 
+    Vector3 checkpointPosition;
+
     Collider2D[] dumbColliders = new Collider2D[1];
 
 
-	void FixedUpdate () 
+	protected override void FixedUpdate () 
     {
+        base.FixedUpdate();
 
         var pos = (Vector2)transform.position;
 
@@ -43,8 +46,10 @@ public class CharacterController2D : MonoBehaviour {
         rigidbody2D.velocity = new Vector2(horizontal * speed, rigidbody2D.velocity.y);
 	}
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             World.ShiftTo(Dimensions.Red);
@@ -67,6 +72,29 @@ public class CharacterController2D : MonoBehaviour {
             rigidbody2D.AddForce(new Vector2(0, 700));
         }
 
+    }
+
+    public override void SetCheckpoint()
+    {
+        base.SetCheckpoint();
+
+        checkpointPosition = transform.position;
+    }
+
+    public override void LoadCheckpoint()
+    {
+        base.LoadCheckpoint();
+
+        transform.position = checkpointPosition;
+        rigidbody2D.velocity = Vector2.zero;
+    }
+
+    public void Interact(GameBehaviour behaviour)
+    {
+        if (behaviour.GetType() == typeof(Spike))
+        {
+            World.LoadCheckpoint();
+        }
     }
 
     void OnDrawGizmos()

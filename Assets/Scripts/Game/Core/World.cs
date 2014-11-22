@@ -68,11 +68,14 @@ public class World {
     private World()
     {
         behaviours = new List<GameBehaviour>();
+        Dimension = Dimensions.Green;
     }
 
     private void _Register(GameBehaviour behaviour)
     {
         behaviours.Add(behaviour);
+        behaviour.SetCheckpoint();
+        behaviour.ShiftTo(Dimension);
     }
 
     private void _ShiftTo(Dimensions dimension)

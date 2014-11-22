@@ -65,7 +65,6 @@ public class GameBehaviour : MonoBehaviour
     /// </summary>
     protected virtual void Awake()
     {
-        World.Register(this);
     }
 
     /// <summary>
@@ -78,6 +77,7 @@ public class GameBehaviour : MonoBehaviour
     /// </summary>
     protected virtual void Start()
     {
+        World.Register(this);
     }
 
     /// <summary>
