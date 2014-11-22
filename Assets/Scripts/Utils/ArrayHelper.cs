@@ -6,7 +6,7 @@ using UnityEngine;
 static public class ArrayHelper
 {
 #if !UNITY_FLASH || UNITY_EDITOR
-    static public T AddArrayElement<T>( ref T[] array ) where T : new()
+    static public T AddArrayElement<T>( ref T[] array ) where T : new() 
     {
         return AddArrayElement<T>( ref array, new T() );
     }
