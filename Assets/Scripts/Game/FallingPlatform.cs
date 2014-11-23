@@ -5,7 +5,7 @@ using Assets.Scripts.Utils;
 
 public class FallingPlatform : GameBehaviour {
 
-	public float timer=4.0f;
+	public float timeToFall=1.0f;
 	public bool resetWhenActive;
 	[EnumMask]
 	public Dimensions ActiveDimensions;
@@ -14,22 +14,21 @@ public class FallingPlatform : GameBehaviour {
 
 	bool isTimerTicking;
 	bool isFalling;
+	float currentTime;
 	
 	GameObject meshContainer;
 
 	Vector3 platformCheckPoint;
-	bool isFallingCheckPoint;
-	bool isTimerTickingCheckPoint;
-	bool isKinematicCheckPoint;
-	float timerCheckPoint;
 	
 	protected override void Awake()
 	{
 		base.Awake();
 		
 		meshContainer = gameObject.FindChild("Mesh");
+		currentTime = timeToFall;
 	}
-	
+
+
 	public override void ShiftTo(Dimensions dimension)
 	{
 		base.ShiftTo(dimension);
@@ -65,9 +64,9 @@ public class FallingPlatform : GameBehaviour {
 	{
 		if (isTimerTicking) 
 		{
-			timer -= Time.deltaTime / 2;
+			currentTime -= Time.deltaTime;
 		}
-		if(timer < 0.0)
+		if(currentTime < 0.0)
 		{
 			rigidbody2D.isKinematic=false;
 			isFalling=true;
@@ -80,10 +79,6 @@ public class FallingPlatform : GameBehaviour {
 
 		//save position, booleans, timer and rigidBody state
 		platformCheckPoint = transform.position;
-		isFallingCheckPoint = isFalling;
-		isTimerTickingCheckPoint = isTimerTicking;
-		isKinematicCheckPoint = rigidbody2D.isKinematic;
-		timerCheckPoint = timer;
 
 	}
 
@@ -91,10 +86,10 @@ public class FallingPlatform : GameBehaviour {
 	{
 		base.LoadCheckpoint ();
 		transform.position = platformCheckPoint;
-		rigidbody2D.isKinematic = isKinematicCheckPoint;
-		timer = timerCheckPoint;
-		isFalling = isFallingCheckPoint;
-		isTimerTicking = isTimerTickingCheckPoint;
+		rigidbody2D.isKinematic = true;
+		currentTime = timeToFall;
+		isFalling = false;
+		isTimerTicking = false;
 	}
 
 }

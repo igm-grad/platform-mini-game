@@ -62,13 +62,15 @@ public class CharacterController2D : GameBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             transform.parent = null;
-            World.ShiftTo(Dimensions.Red);
+			rigidbody2D.WakeUp();
+			World.ShiftTo(Dimensions.Red);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            transform.parent = null;
-            World.ShiftTo(Dimensions.Green);
+			transform.parent = null;
+			rigidbody2D.WakeUp();
+			World.ShiftTo(Dimensions.Green);
         }
 
 
@@ -113,9 +115,9 @@ public class CharacterController2D : GameBehaviour {
 		}
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(transform.position + (Vector3)feetA, transform.position + (Vector3)feetB);
-    }
+//    void OnDrawGizmos()
+//    {
+//        Gizmos.color = Color.magenta;
+//        Gizmos.DrawLine(transform.position + (Vector3)feetA, transform.position + (Vector3)feetB);
+//    }
 }
