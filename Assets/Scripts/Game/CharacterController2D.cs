@@ -62,13 +62,15 @@ public class CharacterController2D : GameBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             transform.parent = null;
-            World.ShiftTo(Dimensions.Red);
+			rigidbody2D.WakeUp();
+			World.ShiftTo(Dimensions.Red);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            transform.parent = null;
-            World.ShiftTo(Dimensions.Green);
+			transform.parent = null;
+			rigidbody2D.WakeUp();
+			World.ShiftTo(Dimensions.Green);
         }
 
 
@@ -102,15 +104,25 @@ public class CharacterController2D : GameBehaviour {
 
     public void Interact(GameBehaviour behaviour)
     {
-        if (behaviour.GetType() == typeof(Spike))
+        if (behaviour.GetType() == typeof(AbysmalPit))
         {
             World.LoadCheckpoint();
         }
+
+		if (behaviour.GetType() == typeof(Spike))
+		{
+			World.LoadCheckpoint();
+		}
+
+		if (behaviour.GetType() == typeof(FallingPlatform))
+		{
+			World.LoadCheckpoint();
+		}
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(transform.position + (Vector3)feetA, transform.position + (Vector3)feetB);
-    }
+//    void OnDrawGizmos()
+//    {
+//        Gizmos.color = Color.magenta;
+//        Gizmos.DrawLine(transform.position + (Vector3)feetA, transform.position + (Vector3)feetB);
+//    }
 }
