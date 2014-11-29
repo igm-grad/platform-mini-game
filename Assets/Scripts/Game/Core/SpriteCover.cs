@@ -3,6 +3,7 @@ using System.Collections;
 using Assets.Scripts.Utils;
 
 [ExecuteInEditMode]
+[RequireComponent(typeof(SpriteRenderer))]
 public class SpriteCover : MonoBehaviour {
 
     public Sprite sprite;
