@@ -21,6 +21,7 @@ public class CharacterController2D : GameBehaviour {
     bool isGrounded;
     bool isGripping;
     bool hasDoubleJump;
+    public bool DoubleJumpEnabled;
 
     Vector3 checkpointPosition;
 
@@ -45,7 +46,7 @@ public class CharacterController2D : GameBehaviour {
 
         isGripping = !isGrounded && Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, wallLayers) > 0;
 
-        if (isGrounded || isGripping)
+        if ((isGrounded || isGripping) && DoubleJumpEnabled)
         {
             hasDoubleJump = true;
         }
@@ -74,7 +75,7 @@ public class CharacterController2D : GameBehaviour {
         }
 
 
-        if ((isGrounded || hasDoubleJump) && Input.GetKeyDown(KeyCode.UpArrow))
+        if ((isGrounded || hasDoubleJump && DoubleJumpEnabled) && Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (!isGrounded)
             {
