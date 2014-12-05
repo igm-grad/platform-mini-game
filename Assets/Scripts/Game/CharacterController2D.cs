@@ -15,8 +15,8 @@ public class CharacterController2D : GameBehaviour {
     public LayerMask groundLayers;
     public LayerMask wallLayers;
     
-    readonly Vector2 feetA = new Vector2(-.25f,  .05f);
-    readonly Vector2 feetB = new Vector2( .25f, -.01f);
+    readonly Vector2 feetA = new Vector2(-.23f,  .05f);
+    readonly Vector2 feetB = new Vector2( .23f, -.01f);
 
     bool isGrounded;
     bool isGripping;
