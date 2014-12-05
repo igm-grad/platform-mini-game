@@ -83,4 +83,21 @@ public class pathShuriken : GameBehaviour {
 			meshContainer.transform.position = waypoints[0].transform.position;
 		}
 	}
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        for (int index = 0; index < waypoints.Length - 1; index++)
+        {
+            Gizmos.DrawLine(waypoints[index].position, waypoints[index + 1].position);
+        }
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(waypoints[0].position, .1f);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(waypoints[waypoints.Length - 1].position, .1f);
+    } 
+#endif
+
 }
