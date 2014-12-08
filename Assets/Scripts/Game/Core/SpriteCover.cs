@@ -1,12 +1,48 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Utils;
 
 [ExecuteInEditMode]
 public class SpriteCover : MonoBehaviour {
 
-    public Sprite sprite;
+    [SerializeField]
     public Material material;
+
+    public Material Material
+    {
+        get { return material; }
+        set
+        {
+            if (value == null || value == material)
+            {
+                return;
+            }
+
+            material = value;
+            SetSliceMaterials();
+        }
+    } 
+
+    [SerializeField]
+    private Sprite sprite;
+
+    public Sprite Sprite
+    {
+        get { return sprite; }
+        set
+        {
+            if (value == null || value == sprite)
+            {
+                return;
+            }
+
+            sprite = value;
+            CreateSliceSprites();
+        }
+    }
+
+    private IDictionary<string, Transform> slices;
+    private Transform meshObject;
 
     [Range(0, 1)]
     public float topMargin = 0.3f;
@@ -20,122 +56,180 @@ public class SpriteCover : MonoBehaviour {
     [Range(0, 1)]
     public float rightMargin = 0.3f;
 
+    private void Awake()
+    {
+        meshObject = transform.parent.FindChild("Mesh");
+
+#if UNITY_EDITOR
+        slices = new Dictionary<string, Transform>();
+
+        CreateSlices(); 
+#endif
+        CreateSliceSprites();
+        SetSliceMaterials();
+        UpdateSlices();
+    }
+
     private void CreateSlices()
     {
+        slices.Clear();
 
         while (transform.childCount > 0)
         {
             GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
         }
-         
-        var meshObject = transform.parent.FindChild("Mesh");
 
-        var mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
+        var keys = new[] { "tr", "tl", "br", "bl", "t", "r", "b", "l", "c" };
 
-        var bounds = mesh.bounds;
-        bounds.size = Vector3.Scale(bounds.size, meshObject.transform.localScale);
+        foreach (var key in keys)
+        {
+            var go = new GameObject(key);
+            var value = go.transform;
 
+            slices.Add(key, value);
+
+            value.parent = transform;
+            value.localScale = Vector3.one;
+            go.AddComponent<SpriteRenderer>();
+        }
+    }
+
+    private void CreateSliceSprites()
+    {
         SpriteRenderer sr;
         Rect rect;
 
         var size = new Vector2(sprite.texture.width, sprite.texture.height);
+        var bodyWidth = 1 - (leftMargin + rightMargin);
+        var bodyHeight = 1 - (topMargin + bottomMargin);
 
         // corners
-        var tr = new GameObject("tr");
-        var br = new GameObject("br");
-        var tl = new GameObject("tl");
-        var bl = new GameObject("bl");
-
-        tr.transform.parent = transform;
-        tr.transform.localPosition = new Vector3(bounds.max.x, bounds.max.y, -1);
-        tr.transform.localScale = Vector3.one;
-        sr = tr.AddComponent<SpriteRenderer>();
+        sr = slices["tr"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * (1 - rightMargin), size.y * (1 - topMargin), size.x * rightMargin, size.y * topMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(1, 1), 1000);
         sr.material = material;
 
-        br.transform.parent = transform;
-        br.transform.localPosition = new Vector3(bounds.max.x, bounds.min.y, -1);
-        br.transform.localScale = Vector3.one;
-        sr = br.AddComponent<SpriteRenderer>();
+        sr = slices["br"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * (1 - rightMargin), 0, size.x * rightMargin, size.y * bottomMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(1, 0), 1000);
         sr.material = material;
 
-        tl.transform.parent = transform;
-        tl.transform.localPosition = new Vector3(bounds.min.x, bounds.max.y, -1);
-        tl.transform.localScale = Vector3.one;
-        sr = tl.AddComponent<SpriteRenderer>();
+        sr = slices["tl"].GetComponent<SpriteRenderer>();
         rect = new Rect(0, size.y * (1 - topMargin), size.x * leftMargin, size.y * topMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(0, 1), 1000);
         sr.material = material;
 
-        bl.transform.parent = transform;
-        bl.transform.localPosition = new Vector3(bounds.min.x, bounds.min.y, -1);
-        bl.transform.localScale = Vector3.one;
-        sr = bl.AddComponent<SpriteRenderer>();
+        sr = slices["bl"].GetComponent<SpriteRenderer>();
         rect = new Rect(0, 0, size.x * leftMargin, size.y * bottomMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(0, 0), 1000);
         sr.material = material;
 
-        // sides
-        var t = new GameObject("t");
-        var r = new GameObject("r");
-        var b = new GameObject("b");
-        var l = new GameObject("l");
-
-        var bodyWidth = 1 - (leftMargin + rightMargin);
-        var bodyHeight = 1 - (topMargin + bottomMargin);
-
-        t.transform.parent = transform;
-        t.transform.localPosition = new Vector3((leftMargin - rightMargin) / 2, bounds.max.y, -1);
-        t.transform.localScale = new Vector3((meshObject.localScale.x - (leftMargin + rightMargin)) * (1 / bodyWidth), 1, 1);
-        sr = t.AddComponent<SpriteRenderer>();
+        sr = slices["t"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * leftMargin, size.y * (1 - topMargin), size.x * bodyWidth, size.y * topMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, 1), 1000);
         sr.material = material;
 
-        r.transform.parent = transform;
-        r.transform.localPosition = new Vector3(bounds.max.x, (bottomMargin - topMargin) / 2, -1);
-        r.transform.localScale = new Vector3(1, (meshObject.localScale.y - (topMargin + bottomMargin)) * (1 / bodyHeight), 1);
-        sr = r.AddComponent<SpriteRenderer>();
+        sr = slices["r"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * (1 - rightMargin), size.y * bottomMargin, size.x * rightMargin, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(1, .5f), 1000);
         sr.material = material;
 
-        b.transform.parent = transform;
-        b.transform.localPosition = new Vector3((leftMargin - rightMargin) / 2, bounds.min.y, -1);
-        b.transform.localScale = new Vector3((meshObject.localScale.x - (leftMargin + rightMargin)) * (1 / bodyWidth), 1, 1);
-        sr = b.AddComponent<SpriteRenderer>();
+        sr = slices["b"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * leftMargin, 0, size.x * bodyWidth, size.y * bottomMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, 0), 1000);
         sr.material = material;
 
-        l.transform.parent = transform;
-        l.transform.localPosition = new Vector3(bounds.min.x, (bottomMargin - topMargin) / 2, -1);
-        l.transform.localScale = new Vector3(1, (meshObject.localScale.y - (topMargin + bottomMargin)) * (1 / bodyHeight), 1);
-        sr = l.AddComponent<SpriteRenderer>();
+        sr = slices["l"].GetComponent<SpriteRenderer>();
         rect = new Rect(0, size.y * bottomMargin, size.x * leftMargin, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(0, .5f), 1000);
         sr.material = material;
 
         // center
-        var c = new GameObject("c");
-        c.transform.parent = transform;
-        c.transform.localPosition = new Vector3((leftMargin - rightMargin) / 2, (bottomMargin - topMargin) / 2, -1);
-        c.transform.localScale = new Vector3((meshObject.localScale.x - (leftMargin + rightMargin)) * (1 / bodyWidth), (meshObject.localScale.y - (topMargin + bottomMargin)) * (1 / bodyHeight), 1);
-        sr = c.AddComponent<SpriteRenderer>();
+        sr = slices["c"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * leftMargin, size.y * bottomMargin, size.x * bodyWidth, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, .5f), 1000);
         sr.material = material;
     }
+
+    private void SetSliceMaterials()
+    {
+        foreach (var slice in slices.Values)
+        {
+            slice.GetComponent<SpriteRenderer>().material = material;
+        }
+    }
+
+    private void UpdateSlices()
+    {
+        var mesh = meshObject.GetComponent<MeshFilter>().sharedMesh;
+
+        var bounds = mesh.bounds;
+        bounds.size = Vector3.Scale(bounds.size, meshObject.transform.localScale);
+        
+        var bodyWidth = 1 - (leftMargin + rightMargin);
+        var bodyHeight = 1 - (topMargin + bottomMargin);
+
+        // corners dont scale, we update their position only
+        slices["tr"].localPosition = new Vector3(bounds.max.x, bounds.max.y, -1);
+        slices["br"].localPosition = new Vector3(bounds.max.x, bounds.min.y, -1);
+        slices["tl"].localPosition = new Vector3(bounds.min.x, bounds.max.y, -1);
+        slices["bl"].localPosition = new Vector3(bounds.min.x, bounds.min.y, -1);
+
+        // sides
+        slices["t"].transform.localPosition = new Vector3((leftMargin - rightMargin) / 2, bounds.max.y, -1);
+        slices["t"].transform.localScale = new Vector3((meshObject.localScale.x - (leftMargin + rightMargin)) * (1 / bodyWidth), 1, 1);
+
+        slices["r"].transform.localPosition = new Vector3(bounds.max.x, (bottomMargin - topMargin) / 2, -1);
+        slices["r"].transform.localScale = new Vector3(1, (meshObject.localScale.y - (topMargin + bottomMargin)) * (1 / bodyHeight), 1);
+
+        slices["b"].transform.localPosition = new Vector3((leftMargin - rightMargin) / 2, bounds.min.y, -1);
+        slices["b"].transform.localScale = new Vector3((meshObject.localScale.x - (leftMargin + rightMargin)) * (1 / bodyWidth), 1, 1);
+
+        slices["l"].transform.localPosition = new Vector3(bounds.min.x, (bottomMargin - topMargin) / 2, -1);
+        slices["l"].transform.localScale = new Vector3(1, (meshObject.localScale.y - (topMargin + bottomMargin)) * (1 / bodyHeight), 1);
+
+        // center
+        slices["c"].transform.localPosition = new Vector3((leftMargin - rightMargin) / 2, (bottomMargin - topMargin) / 2, -1);
+        slices["c"].transform.localScale = new Vector3((meshObject.localScale.x - (leftMargin + rightMargin)) * (1 / bodyWidth), (meshObject.localScale.y - (topMargin + bottomMargin)) * (1 / bodyHeight), 1);
+    }
+
+
+#if UNITY_EDITOR
+    Sprite lastSprite;
+    Material lastMaterial;
+    int marginHash;
+#endif
 
     private void Update()
     {
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
-            CreateSlices();
+            if (meshObject == null)
+            {
+                Awake();
+            }
+
+            if (lastMaterial != material)
+            {
+                lastMaterial = material;
+                SetSliceMaterials();
+            }
+
+            if (lastSprite != sprite)
+            {
+                lastSprite = sprite;
+                CreateSliceSprites();
+            }
+
+            var hash = string.Format("{0}|{1}|{2}|{3}", topMargin, rightMargin, bottomMargin, leftMargin).GetHashCode();
+            if (hash != marginHash)
+            {
+                marginHash = hash;
+                CreateSliceSprites();
+            }
+
+            UpdateSlices();
         }
 #endif
     }
