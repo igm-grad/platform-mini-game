@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class checkPoint : GameBehaviour {
+public class CheckPoint : GameBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{

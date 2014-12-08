@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Utils;
 
@@ -21,9 +21,11 @@ public class MovingPlatform : GameBehaviour {
 		base.Awake();
 
 		meshContainer = gameObject.FindChild("Mesh");
+
 		pointA = transform.FindChild ("pointA");
 		pointB = transform.FindChild ("pointB");
-        direction = (pointB.position - pointA.position).normalized;
+		meshContainer.transform.position = pointA.position;
+		direction = (pointB.position - pointA.position).normalized;
 	}
 
     protected override void Update()
@@ -71,4 +73,20 @@ public class MovingPlatform : GameBehaviour {
             meshContainer.transform.position = pointA.transform.position;
         }
     }
+	
+#if UNITY_EDITOR
+	private void OnDrawGizmos()
+	{	
+		meshContainer = gameObject.FindChild("Mesh");
+		pointA = transform.FindChild ("pointA");
+		pointB = transform.FindChild ("pointB");
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawLine(pointA.position, pointB.position);
+		Gizmos.DrawSphere(meshContainer.transform.position, .1f);
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawSphere(pointA.position, .1f);
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawSphere(pointB.position, .1f);
+	}
+#endif
 }

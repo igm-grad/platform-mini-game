@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class shurikenStartScript : GameBehaviour {
+public class ShurikenStartScript : GameBehaviour {
 
-	//public GameObject player;
-
-
+	//Script to check if the player has entered the box collider
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
@@ -14,7 +12,7 @@ public class shurikenStartScript : GameBehaviour {
 		Debug.Log (coll.gameObject.name);
 		if (coll.gameObject.name == "Mesh") 
 		{
-			this.transform.parent.GetComponent<followingShuriken>().isActive = true;
+			this.transform.parent.GetComponent<FollowingShuriken>().isActive = true;
 		}
 	}
 
@@ -25,7 +23,7 @@ public class shurikenStartScript : GameBehaviour {
         Debug.Log(coll.gameObject.name);
         if (coll.gameObject.name == "Mesh")
         {
-            this.transform.parent.GetComponent<followingShuriken>().isActive = false;
+            this.transform.parent.GetComponent<FollowingShuriken>().isActive = false;
         }
     }
 }

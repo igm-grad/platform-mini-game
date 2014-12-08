@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class pathShurikenStart : GameBehaviour {
+public class PathShurikenStart : GameBehaviour {
+
+	//Script to check if the player has entered the box collider
 
     void OnTriggerEnter2D(Collider2D coll)
     {
@@ -10,7 +12,7 @@ public class pathShurikenStart : GameBehaviour {
         Debug.Log(coll.gameObject.name);
         if (coll.gameObject.name == "Mesh")
         {
-            this.transform.parent.GetComponent<pathShuriken>().isActive2 = true;
+            this.transform.parent.GetComponent<PathShuriken>().isActive2 = true;
         }
     }
 
@@ -21,7 +23,7 @@ public class pathShurikenStart : GameBehaviour {
         Debug.Log(coll.gameObject.name);
         if (coll.gameObject.name == "Mesh")
         {
-            this.transform.parent.GetComponent<pathShuriken>().isActive2 = false;
+            this.transform.parent.GetComponent<PathShuriken>().isActive2 = false;
         }
     }
 }

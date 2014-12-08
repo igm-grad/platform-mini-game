@@ -2,7 +2,7 @@
 using System.Collections;
 using Assets.Scripts.Utils;
 
-public class followingShuriken : GameBehaviour {
+public class FollowingShuriken : GameBehaviour {
 
 	[EnumMask]
 	public Dimensions ActiveDimensions;

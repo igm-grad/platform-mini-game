@@ -2,8 +2,9 @@
 using System.Collections;
 using Assets.Scripts.Utils;
 
-public class pathShuriken : GameBehaviour {
+public class PathShuriken : GameBehaviour {
 
+	[EnumMask]
 	public Dimensions ActiveDimensions;
 	public bool resetWhenActive;
 	public bool hideWhenInactive;
@@ -27,7 +28,7 @@ public class pathShuriken : GameBehaviour {
 	protected override void Update()
 	{
 		base.Update();
-        Debug.Log("hello");
+        
 		if (isActive && isActive2)
 		{
             if (i < waypoints.Length -1)
@@ -71,13 +72,13 @@ public class pathShuriken : GameBehaviour {
 		base.ShiftTo(dimension);
 		
 		isActive = (dimension & ActiveDimensions) == dimension;
-		
+
 		// show when active or when inactive and we dont need to hide
 		foreach (var mesh in hidingMeshes)
 		{
 			mesh.SetActive(isActive || !hideWhenInactive);
 		}
-		
+
 		if (isActive && resetWhenActive)
 		{
 			meshContainer.transform.position = waypoints[0].transform.position;
@@ -87,6 +88,7 @@ public class pathShuriken : GameBehaviour {
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+
         Gizmos.color = Color.magenta;
         for (int index = 0; index < waypoints.Length - 1; index++)
         {
