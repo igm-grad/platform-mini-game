@@ -24,7 +24,7 @@ public class SpriteCover : MonoBehaviour {
     } 
 
     [SerializeField]
-    private Sprite sprite;
+	private Sprite sprite;
 
     public Sprite Sprite
     {
@@ -41,7 +41,25 @@ public class SpriteCover : MonoBehaviour {
         }
     }
 
-    private IDictionary<string, Transform> slices;
+	[SerializeField]
+	private Color color;
+
+	public Color Color
+	{
+		get { return color; }
+		set
+		{
+			if (value == null || value == color)
+			{
+				return;
+			}
+			
+			color = value;
+			PaintSliceSprites();
+		}
+	}
+
+	private IDictionary<string, Transform> slices;
     private Transform meshObject;
 
     [Range(0, 1)]
@@ -150,6 +168,13 @@ public class SpriteCover : MonoBehaviour {
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, .5f), 1000);
         sr.material = material;
     }
+
+	private void PaintSliceSprites()
+	{
+		foreach (var slice in slices.Values) {
+			slice.GetComponent<SpriteRenderer>().color = color;
+		}
+	}
 
     private void SetSliceMaterials()
     {

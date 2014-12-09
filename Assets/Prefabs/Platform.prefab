@@ -101,7 +101,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 8f78f662b729f434882baf87904a3802, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActiveDimensions: 2
   activeSprite: {fileID: 21300000, guid: 717a3491e974e1845b8b426213861392, type: 3}
-  inactiveSprite: {fileID: 21300000, guid: 717a3491e974e1845b8b426213861392, type: 3}
+  inactiveSprite: {fileID: 21300000, guid: fdf949c86aeae6e4e8878ad643f94aa3, type: 3}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 8ba07fe871b6dc44987bbd155eba760f, type: 2}
   sprite: {fileID: 21300000, guid: 717a3491e974e1845b8b426213861392, type: 3}
+  color: {r: 0, g: 0, b: 0, a: 0}
   topMargin: .300000012
   bottomMargin: .300000012
   leftMargin: .300000012

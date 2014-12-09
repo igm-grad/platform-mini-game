@@ -10,6 +10,10 @@ public class Platform : GameBehaviour {
     public Sprite activeSprite;
     public Sprite inactiveSprite;
 
+	private Color Red = new Color(214/255.0f, 69/255.0f, 64/255.0f);
+	private Color Green = new Color(57/255.0f, 163/255.0f, 65/255.0f);
+	private Color Both = new Color(235/255.0f, 212/255.0f, 66/255.0f);
+
     private GameObject meshContainer;
     private SpriteCover spriteCover;
 
@@ -28,5 +32,6 @@ public class Platform : GameBehaviour {
         meshContainer.SetActive(active);
 
         spriteCover.Sprite = active ? activeSprite : inactiveSprite;
+		spriteCover.Color = (ActiveDimensions == Dimensions.Red) ? Red : (ActiveDimensions == Dimensions.Green) ? Green : Both;
     }
 }
