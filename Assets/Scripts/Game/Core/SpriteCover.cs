@@ -5,6 +5,8 @@ using Assets.Scripts.Utils;
 [ExecuteInEditMode]
 public class SpriteCover : MonoBehaviour {
 
+    private static IDictionary<int, Sprite[]> spriteCache = new Dictionary<int, Sprite[]>();
+
     [SerializeField]
     public Material material;
 
@@ -112,8 +114,31 @@ public class SpriteCover : MonoBehaviour {
         }
     }
 
+    private int GetSpriteSetHashCode(Sprite sprite, float top, float right, float bottom, float left)
+    {
+        return string.Format("{0}.{1}.{2}.{3}.{4}", sprite.GetInstanceID(), top, right, bottom, left).GetHashCode();
+    }
+
     private void CreateSliceSprites()
     {
+        var hash = GetSpriteSetHashCode(sprite, topMargin, rightMargin, bottomMargin, leftMargin);
+        if (spriteCache.ContainsKey(hash))
+        {
+            var cache = spriteCache[hash];
+
+            slices["tr"].GetComponent<SpriteRenderer>().sprite = cache[0];
+            slices["br"].GetComponent<SpriteRenderer>().sprite = cache[1];
+            slices["tl"].GetComponent<SpriteRenderer>().sprite = cache[2];
+            slices["bl"].GetComponent<SpriteRenderer>().sprite = cache[3];
+            slices["t"].GetComponent<SpriteRenderer>().sprite = cache[4];
+            slices["l"].GetComponent<SpriteRenderer>().sprite = cache[5];
+            slices["b"].GetComponent<SpriteRenderer>().sprite = cache[6];
+            slices["r"].GetComponent<SpriteRenderer>().sprite = cache[7];
+            slices["c"].GetComponent<SpriteRenderer>().sprite = cache[8];
+
+            return;
+        }
+
         SpriteRenderer sr;
         Rect rect;
 
@@ -125,48 +150,54 @@ public class SpriteCover : MonoBehaviour {
         sr = slices["tr"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * (1 - rightMargin), size.y * (1 - topMargin), size.x * rightMargin, size.y * topMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(1, 1), 1000);
-        sr.material = material;
 
         sr = slices["br"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * (1 - rightMargin), 0, size.x * rightMargin, size.y * bottomMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(1, 0), 1000);
-        sr.material = material;
 
         sr = slices["tl"].GetComponent<SpriteRenderer>();
         rect = new Rect(0, size.y * (1 - topMargin), size.x * leftMargin, size.y * topMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(0, 1), 1000);
-        sr.material = material;
 
         sr = slices["bl"].GetComponent<SpriteRenderer>();
         rect = new Rect(0, 0, size.x * leftMargin, size.y * bottomMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(0, 0), 1000);
-        sr.material = material;
 
         sr = slices["t"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * leftMargin, size.y * (1 - topMargin), size.x * bodyWidth, size.y * topMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, 1), 1000);
-        sr.material = material;
 
         sr = slices["r"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * (1 - rightMargin), size.y * bottomMargin, size.x * rightMargin, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(1, .5f), 1000);
-        sr.material = material;
 
         sr = slices["b"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * leftMargin, 0, size.x * bodyWidth, size.y * bottomMargin);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, 0), 1000);
-        sr.material = material;
 
         sr = slices["l"].GetComponent<SpriteRenderer>();
         rect = new Rect(0, size.y * bottomMargin, size.x * leftMargin, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(0, .5f), 1000);
-        sr.material = material;
 
         // center
         sr = slices["c"].GetComponent<SpriteRenderer>();
         rect = new Rect(size.x * leftMargin, size.y * bottomMargin, size.x * bodyWidth, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, .5f), 1000);
-        sr.material = material;
+
+        var newCache = new [] {
+            slices["tr"].GetComponent<SpriteRenderer>().sprite,
+            slices["br"].GetComponent<SpriteRenderer>().sprite,
+            slices["tl"].GetComponent<SpriteRenderer>().sprite,
+            slices["bl"].GetComponent<SpriteRenderer>().sprite,
+            slices["t"].GetComponent<SpriteRenderer>().sprite,
+            slices["l"].GetComponent<SpriteRenderer>().sprite,
+            slices["b"].GetComponent<SpriteRenderer>().sprite,
+            slices["r"].GetComponent<SpriteRenderer>().sprite,
+            slices["c"].GetComponent<SpriteRenderer>().sprite
+        };
+
+        spriteCache.Add(hash, newCache);
+        Debug.Log("created new cache entry");
     }
 
 	private void PaintSliceSprites()
