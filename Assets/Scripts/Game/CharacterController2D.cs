@@ -18,6 +18,7 @@ public class CharacterController2D : GameBehaviour {
     readonly Vector2 feetA = new Vector2(-.23f,  .05f);
     readonly Vector2 feetB = new Vector2( .23f, -.01f);
 
+    Animator animator;
     bool isGrounded;
     bool isGripping;
     bool hasDoubleJump;
@@ -27,6 +28,12 @@ public class CharacterController2D : GameBehaviour {
 
     Collider2D[] dumbColliders = new Collider2D[1];
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        animator = GetComponent<Animator>();
+    }
 
 	protected override void FixedUpdate () 
     {
@@ -34,6 +41,7 @@ public class CharacterController2D : GameBehaviour {
 
         var pos = (Vector2)transform.position;
 
+        var wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, groundLayers) > 0;
         if(isGrounded)
         {
@@ -52,9 +60,20 @@ public class CharacterController2D : GameBehaviour {
         }
 
         var horizontal = Input.GetAxis("Horizontal");
+        
+        animator.SetBool("IsWalking", Mathf.Abs(horizontal) > 0.3f);
+        animator.SetBool("IsGrounded", isGrounded);
+        animator.SetFloat("Vertical Speed", rigidbody2D.velocity.y);
+        landSpeed = Mathf.Min(rigidbody2D.velocity.y, landSpeed);
+        if (isGrounded && !wasGrounded)
+        {
+            animator.SetFloat("Land Speed", landSpeed);
+            landSpeed = 0;
+        }
 
         rigidbody2D.velocity = new Vector2(horizontal * speed, rigidbody2D.velocity.y);
 	}
+    float landSpeed;
 
     protected override void Update()
     {
