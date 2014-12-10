@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Utils;
 
@@ -17,6 +17,8 @@ public class Platform : GameBehaviour {
     private GameObject meshContainer;
     private SpriteCover spriteCover;
 
+	private Dimensions cpActiveDimensions;
+
     protected override void Awake()
     {
         base.Awake();
@@ -24,6 +26,14 @@ public class Platform : GameBehaviour {
         meshContainer = gameObject.FindChild("Mesh");
         spriteCover = gameObject.FindChild("Sprites").GetComponent<SpriteCover>();
     }
+
+	public void SetActiveDimensions(Dimensions dimension)
+	{
+		
+		Debug.Log("Hi");
+		ActiveDimensions = dimension;
+		ShiftTo (World.Dimension);
+	}
 
     public override void ShiftTo(Dimensions dimension)
     {
@@ -34,4 +44,18 @@ public class Platform : GameBehaviour {
         spriteCover.Sprite = active ? activeSprite : inactiveSprite;
 		spriteCover.Color = (ActiveDimensions == Dimensions.Red) ? Red : (ActiveDimensions == Dimensions.Green) ? Green : Both;
     }
+
+	public override void SetCheckpoint ()
+	{
+		base.SetCheckpoint ();
+		cpActiveDimensions = ActiveDimensions;
+
+	}
+
+	public override void LoadCheckpoint ()
+	{
+		base.LoadCheckpoint ();
+		SetActiveDimensions (cpActiveDimensions);
+
+	}
 }
