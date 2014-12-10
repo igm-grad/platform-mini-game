@@ -3,10 +3,9 @@ using System.Collections;
 
 public class AbysmalPit : GameBehaviour {
 
-    void OnCollisionEnter2D(Collision2D coll)
+    void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log(" hi " + coll.gameObject.name);
-        var player = coll.gameObject.GetComponent<CharacterController2D>();
+		var player = Utils.GetPlayerFromCollider(coll);
         if (player != null)
         {
             player.Interact(this);

@@ -12,7 +12,7 @@ public class Platform : GameBehaviour {
 
 	private Color Red = new Color(214/255.0f, 69/255.0f, 64/255.0f);
 	private Color Green = new Color(57/255.0f, 163/255.0f, 65/255.0f);
-	private Color Both = new Color(235/255.0f, 212/255.0f, 66/255.0f);
+	private Color Both = new Color(59/255.0f, 99/255.0f, 161/255.0f);
 
     private GameObject meshContainer;
     private SpriteCover spriteCover;
