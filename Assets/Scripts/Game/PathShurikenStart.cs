@@ -12,7 +12,7 @@ public class PathShurikenStart : GameBehaviour {
         Debug.Log(coll.gameObject.name);
         if (coll.gameObject.name == "Mesh")
         {
-            this.transform.parent.GetComponent<PathShuriken>().isActive2 = true;
+			this.transform.parent.GetComponent<PathShuriken>().EnableMoving();
         }
     }
 
@@ -23,7 +23,7 @@ public class PathShurikenStart : GameBehaviour {
         Debug.Log(coll.gameObject.name);
         if (coll.gameObject.name == "Mesh")
         {
-            this.transform.parent.GetComponent<PathShuriken>().isActive2 = false;
+            this.transform.parent.GetComponent<PathShuriken>().DisableMoving();
         }
     }
 }

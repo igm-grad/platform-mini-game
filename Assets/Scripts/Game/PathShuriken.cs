@@ -14,10 +14,10 @@ public class PathShuriken : GameBehaviour {
 	private int i;
 
 	private bool isActive;
-    public bool isActive2;
+    private bool isMoving;
 	protected override void Awake()
 	{
-        isActive2 = false;
+        isMoving = false;
 		base.Awake();
 		i = 0;
 		meshContainer = gameObject.FindChild("Mesh");
@@ -29,7 +29,7 @@ public class PathShuriken : GameBehaviour {
 	{
 		base.Update();
         
-		if (isActive && isActive2)
+		if (isActive && isMoving)
 		{
             if (i < waypoints.Length -1)
             {
@@ -73,17 +73,28 @@ public class PathShuriken : GameBehaviour {
 		
 		isActive = (dimension & ActiveDimensions) == dimension;
 
+		var isAnyMeshDisplayed = false;
 		// show when active or when inactive and we dont need to hide
 		foreach (var mesh in hidingMeshes)
 		{
+			isAnyMeshDisplayed = isAnyMeshDisplayed || (isActive || !hideWhenInactive);
 			mesh.SetActive(isActive || !hideWhenInactive);
 		}
+		meshContainer.SetActive(isAnyMeshDisplayed);
 
 		if (isActive && resetWhenActive)
 		{
 			meshContainer.transform.position = waypoints[0].transform.position;
 		}
 	}
+
+	public void EnableMoving() {
+		isMoving = true;
+	}
+	public void DisableMoving() {
+		isMoving = false;
+	}
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
