@@ -37,6 +37,11 @@ public class World {
         Instance._LoadCheckpoint();
     }
 
+	public static void ResetWorld()
+	{
+		_instance = null;
+	}
+
     #endregion
 
     #region Instance

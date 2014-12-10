@@ -16,10 +16,10 @@ public class JumpLevel : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D coll)
 	{
-		Debug.Log(" hi " + coll.gameObject.name);
 		if (coll.gameObject.name == "Player") 
 		{
 			Application.LoadLevel(NextLevelName);
+			World.ResetWorld();
 		}
 		/*var player = coll.gameObject.GetComponent<CharacterController2D>();
 		if (player != null)
