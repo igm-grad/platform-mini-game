@@ -7,10 +7,8 @@ public class PathShurikenStart : GameBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        //GameObject shuriken = transform.parent;
-
-        Debug.Log(coll.gameObject.name);
-        if (coll.gameObject.name == "Mesh")
+        var player = Utils.GetPlayerFromCollider(coll);
+		if (player != null)
         {
 			this.transform.parent.GetComponent<PathShuriken>().EnableMoving();
         }
@@ -18,10 +16,8 @@ public class PathShurikenStart : GameBehaviour {
 
     void OnTriggerExit2D(Collider2D coll)
     {
-        //GameObject shuriken = transform.parent;
-
-        Debug.Log(coll.gameObject.name);
-        if (coll.gameObject.name == "Mesh")
+        var player = Utils.GetPlayerFromCollider(coll);
+		if (player != null)
         {
             this.transform.parent.GetComponent<PathShuriken>().DisableMoving();
         }
