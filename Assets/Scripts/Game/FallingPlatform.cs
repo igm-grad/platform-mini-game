@@ -7,23 +7,25 @@ public class FallingPlatform : GameBehaviour {
 
 	public float timeToFall=1.0f;
 	public bool resetWhenActive;
-	[EnumMask]
-	public Dimensions ActiveDimensions;
+
 	[EnumMask]
 	public Dimensions FallingDimensions;
 
 	bool isTimerTicking;
 	bool isFalling;
 	float currentTime;
-	
-	GameObject meshContainer;
+	private Dimensions ActiveDimensions;
 
+	GameObject meshContainer;
+		
 	Vector3 platformCheckPoint;
 	
 	protected override void Awake()
 	{
 		base.Awake();
-		
+
+		var g = GetComponent<Platform> ();
+		ActiveDimensions = g.ActiveDimensions;
 		meshContainer = gameObject.FindChild("Mesh");
 		currentTime = timeToFall;
 	}
@@ -33,7 +35,7 @@ public class FallingPlatform : GameBehaviour {
 	{
 		base.ShiftTo(dimension);
 		var active = (dimension & ActiveDimensions) == dimension;
-		meshContainer.SetActive(active);
+		//meshContainer.SetActive(active);
 		if(resetWhenActive && active)
 		{
 			LoadCheckpoint();
@@ -69,6 +71,7 @@ public class FallingPlatform : GameBehaviour {
 		if(currentTime < 0.0)
 		{
 			rigidbody2D.isKinematic=false;
+			meshContainer.collider2D.enabled = false;
 			isFalling=true;
 		}
 	}
@@ -90,6 +93,7 @@ public class FallingPlatform : GameBehaviour {
 		currentTime = timeToFall;
 		isFalling = false;
 		isTimerTicking = false;
+		meshContainer.collider2D.enabled = true;
 	}
 
 }

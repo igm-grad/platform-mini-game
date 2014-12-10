@@ -44,7 +44,7 @@ GameObject:
   - 61: {fileID: 6100000}
   - 114: {fileID: 11400002}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: SpikeB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ GameObject:
   - 61: {fileID: 6100002}
   - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: SpikeT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +114,7 @@ GameObject:
   - 61: {fileID: 6100004}
   - 114: {fileID: 11400006}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: SpikeL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,7 +149,7 @@ GameObject:
   - 61: {fileID: 6100006}
   - 114: {fileID: 11400008}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: SpikeR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,7 +379,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3, y: -.0456428528, z: 0}
   m_LocalScale: {x: .5, y: .5, z: .5}
   m_Children:
   - {fileID: 400018}
@@ -395,7 +395,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100026}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.57473373, y: 3.83413553, z: 0}
+  m_LocalPosition: {x: 61.3696747, y: -1.75234473, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
@@ -685,19 +685,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64dbf17d6e0a91847bcca6518375ade3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveDimensions: 1
-  resetWhenActive: 0
-  hideWhenInactive: 0
-  hidingMeshes:
-  - {fileID: 100018}
-  - {fileID: 100014}
-  - {fileID: 100010}
-  - {fileID: 100006}
+  dimensionsToShow: 3
+  dimensionsToMove: 2
+  resetWhenVisible: 0
+  ignorePlayerPresence: 0
   waypoints:
   - {fileID: 400022}
   - {fileID: 400020}
   - {fileID: 400002}
-  isActive2: 1
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -709,7 +704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d380d79b2afb5104a865db6311d5ab85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveDimensions: 1
+  ActiveDimensions: 3
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -721,7 +716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d380d79b2afb5104a865db6311d5ab85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveDimensions: 1
+  ActiveDimensions: 3
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -733,7 +728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d380d79b2afb5104a865db6311d5ab85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveDimensions: 1
+  ActiveDimensions: 3
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -745,7 +740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d380d79b2afb5104a865db6311d5ab85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveDimensions: 1
+  ActiveDimensions: 3
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1

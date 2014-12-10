@@ -5,19 +5,19 @@ using Assets.Scripts.Utils;
 public class PathShuriken : GameBehaviour {
 
 	[EnumMask]
-	public Dimensions ActiveDimensions;
-	public bool resetWhenActive;
-	public bool hideWhenInactive;
-	public GameObject[] hidingMeshes;
+	public Dimensions dimensionsToShow;
+	public Dimensions dimensionsToMove;
+	public bool resetWhenVisible;
+	public bool ignorePlayerPresence;
+	/*public GameObject[] hidenMeshes;*/
 	public Transform[] waypoints;
 	private GameObject meshContainer;
 	private int i;
 
-	private bool isActive;
-    public bool isActive2;
+    private bool isMoving;
 	protected override void Awake()
 	{
-        isActive2 = false;
+        isMoving = false;
 		base.Awake();
 		i = 0;
 		meshContainer = gameObject.FindChild("Mesh");
@@ -29,7 +29,7 @@ public class PathShuriken : GameBehaviour {
 	{
 		base.Update();
         
-		if (isActive && isActive2)
+		if (((World.Dimension & dimensionsToMove) == World.Dimension) && (isMoving || ignorePlayerPresence))
 		{
             if (i < waypoints.Length -1)
             {
@@ -70,20 +70,28 @@ public class PathShuriken : GameBehaviour {
 	public override void ShiftTo(Dimensions dimension)
 	{
 		base.ShiftTo(dimension);
-		
-		isActive = (dimension & ActiveDimensions) == dimension;
+		var isVisible = (dimension & dimensionsToShow) == dimension;
 
+		meshContainer.SetActive(isVisible);
 		// show when active or when inactive and we dont need to hide
-		foreach (var mesh in hidingMeshes)
+		/*foreach (var mesh in hidenMeshes)
 		{
 			mesh.SetActive(isActive || !hideWhenInactive);
-		}
+		}*/
 
-		if (isActive && resetWhenActive)
+		if (isVisible && resetWhenVisible)
 		{
 			meshContainer.transform.position = waypoints[0].transform.position;
 		}
 	}
+
+	public void EnableMoving() {
+		isMoving = true;
+	}
+	public void DisableMoving() {
+		isMoving = false;
+	}
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

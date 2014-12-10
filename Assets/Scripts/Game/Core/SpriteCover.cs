@@ -121,7 +121,13 @@ public class SpriteCover : MonoBehaviour {
 
     private void CreateSliceSprites()
     {
-        var hash = GetSpriteSetHashCode(sprite, topMargin, rightMargin, bottomMargin, leftMargin);
+		int hash = 0;
+
+#if UNITY_EDITOR
+		if(Application.isPlaying) {
+#endif
+
+        hash = GetSpriteSetHashCode(sprite, topMargin, rightMargin, bottomMargin, leftMargin);
         if (spriteCache.ContainsKey(hash))
         {
             var cache = spriteCache[hash];
@@ -138,6 +144,10 @@ public class SpriteCover : MonoBehaviour {
 
             return;
         }
+
+#if UNITY_EDITOR
+		}
+#endif
 
         SpriteRenderer sr;
         Rect rect;
@@ -184,7 +194,11 @@ public class SpriteCover : MonoBehaviour {
         rect = new Rect(size.x * leftMargin, size.y * bottomMargin, size.x * bodyWidth, size.y * bodyHeight);
         sr.sprite = Sprite.Create(sprite.texture, rect, new Vector2(.5f, .5f), 1000);
 
-        var newCache = new [] {
+#if UNITY_EDITOR
+		if(Application.isPlaying) {
+#endif
+        
+		var newCache = new [] {
             slices["tr"].GetComponent<SpriteRenderer>().sprite,
             slices["br"].GetComponent<SpriteRenderer>().sprite,
             slices["tl"].GetComponent<SpriteRenderer>().sprite,
@@ -195,9 +209,13 @@ public class SpriteCover : MonoBehaviour {
             slices["r"].GetComponent<SpriteRenderer>().sprite,
             slices["c"].GetComponent<SpriteRenderer>().sprite
         };
+			
+			spriteCache.Add(hash, newCache);
 
-        spriteCache.Add(hash, newCache);
-        Debug.Log("created new cache entry");
+			Debug.Log("created new cache entry " + sprite.GetInstanceID() + " " + topMargin + " "+leftMargin+" "+bottomMargin+" "+rightMargin);
+#if UNITY_EDITOR
+		}
+#endif
     }
 
 	private void PaintSliceSprites()

@@ -1,26 +1,25 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using Assets.Scripts.Utils;
 
 public class Collectable : GameBehaviour {
 
 	[EnumMask]
 	public Dimensions ActiveDimensions;
-	[EnumMask]
-	public Dimensions CollectableDimensions;
-
 	public bool resetOnLoad;
+	public bool IsCollected { get; private set; }
+
+	public event Action<Collectable> Collected;
 
 	bool isActive;
 	GameObject container;
-	bool collected;
 
 	bool cpCollected;
 
 	protected override void Awake()
 	{
 		base.Awake();
-		
+
 		container = gameObject.FindChild("Container");
 	}
 
@@ -31,9 +30,9 @@ public class Collectable : GameBehaviour {
 		base.ShiftTo(dimension);
 
 		isActive = (dimension & ActiveDimensions) == dimension;
-		container.SetActive(isActive && !collected);
+		container.SetActive(isActive && !IsCollected);
 
-		if(isActive && !collected)
+		if(isActive && !IsCollected)
 		{
 			var mask = 1 << LayerMask.NameToLayer ("Player");
 			
@@ -47,7 +46,7 @@ public class Collectable : GameBehaviour {
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
-		if(!isActive || collected)
+		if(!isActive || IsCollected)
 		{
 			return;
 		}
@@ -62,11 +61,16 @@ public class Collectable : GameBehaviour {
 
 		if(player != null)
 		{
-			var canCollect = (World.Dimension & CollectableDimensions) == World.Dimension;
+			var canCollect = (World.Dimension & ActiveDimensions) == World.Dimension;
 			if(canCollect)
 			{
-				collected = true;
+				IsCollected = true;
 				container.SetActive(false);
+				if(Collected!=null)
+				{
+					Collected(this);
+				}
+
 			}
 		}
 	}
@@ -75,7 +79,7 @@ public class Collectable : GameBehaviour {
 	{
 		base.SetCheckpoint ();
 
-		cpCollected = collected;
+		cpCollected = IsCollected;
 
 	}
 	
@@ -84,8 +88,8 @@ public class Collectable : GameBehaviour {
 		base.LoadCheckpoint ();
 		if(resetOnLoad)
 		{
-			collected=cpCollected;
-			container.SetActive(isActive && !collected);
+			IsCollected=cpCollected;
+			container.SetActive(isActive && !IsCollected);
 		}
 	}
 }
