@@ -14,6 +14,7 @@ public class FallingPlatform : GameBehaviour {
 	bool isTimerTicking;
 	bool isFalling;
 	float currentTime;
+	private Dimensions ActiveDimensions;
 
 	GameObject meshContainer;
 		
@@ -23,6 +24,8 @@ public class FallingPlatform : GameBehaviour {
 	{
 		base.Awake();
 
+		var g = GetComponent<Platform> ();
+		ActiveDimensions = g.ActiveDimensions;
 		meshContainer = gameObject.FindChild("Mesh");
 		currentTime = timeToFall;
 	}
@@ -31,7 +34,9 @@ public class FallingPlatform : GameBehaviour {
 	public override void ShiftTo(Dimensions dimension)
 	{
 		base.ShiftTo(dimension);
-		if(resetWhenActive && gameObject.active)
+		var active = (dimension & ActiveDimensions) == dimension;
+		//meshContainer.SetActive(active);
+		if(resetWhenActive && active)
 		{
 			LoadCheckpoint();
 		}

@@ -5,12 +5,13 @@ using Assets.Scripts.Utils;
 public class MovingPlatform : GameBehaviour {
 
 	[EnumMask]
-	public Dimensions ActiveDimensions;
-    public bool resetWhenActive;
+	public bool resetWhenActive;
     public bool hideWhenInactive;
     public GameObject[] hidingMeshes;
 	
+	private Dimensions ActiveDimensions;
 	private GameObject meshContainer;
+	private GameObject spriteContainer;
 	private Transform pointA;
 	private Transform pointB;
     private Vector3 direction;
@@ -21,10 +22,15 @@ public class MovingPlatform : GameBehaviour {
 		base.Awake();
 
 		meshContainer = gameObject.FindChild("Mesh");
+		spriteContainer = gameObject.FindChild("Sprites");
+
+		var g = GetComponent<Platform> ();
+		ActiveDimensions = g.ActiveDimensions;
 
 		pointA = transform.FindChild ("pointA");
 		pointB = transform.FindChild ("pointB");
 		meshContainer.transform.position = pointA.position;
+		spriteContainer.transform.position = pointA.position;
 		direction = (pointB.position - pointA.position).normalized;
 	}
 
@@ -51,7 +57,8 @@ public class MovingPlatform : GameBehaviour {
             {
                 direction = -direction;
             }
-            meshContainer.transform.Translate(direction * 4 * Time.deltaTime); 
+			meshContainer.transform.Translate(direction * 4 * Time.deltaTime); 
+			spriteContainer.transform.Translate(direction * 4 * Time.deltaTime); 
         }
         
     }
@@ -71,6 +78,7 @@ public class MovingPlatform : GameBehaviour {
         if (isActive && resetWhenActive)
         {
             meshContainer.transform.position = pointA.transform.position;
+            spriteContainer.transform.position = pointA.transform.position;
         }
     }
 	
