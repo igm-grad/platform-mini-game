@@ -8,7 +8,7 @@ public class MovingPlatform : GameBehaviour {
 	public bool resetWhenActive;
     public bool hideWhenInactive;
     public GameObject[] hidingMeshes;
-	
+
 	private Dimensions ActiveDimensions;
 	private GameObject meshContainer;
 	private GameObject spriteContainer;
