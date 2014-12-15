@@ -60,7 +60,14 @@ public class CharacterController2D : GameBehaviour {
         }
 
         var horizontal = Input.GetAxis("Horizontal");
-        
+
+        //var sign = Mathf.Sign(horizontal * transform.lossyScale.x);
+        //var scale = new Vector3(transform.localScale.x * sign, transform.localScale.y, transform.localScale.z);
+        //transform.localScale = scale;
+
+        var sign = Mathf.Sign(horizontal);
+
+        animator.SetBool("Mirror", sign < 0);
         animator.SetBool("IsWalking", Mathf.Abs(horizontal) > 0.3f);
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("Vertical Speed", rigidbody2D.velocity.y);
@@ -105,7 +112,15 @@ public class CharacterController2D : GameBehaviour {
             rigidbody2D.AddForce(new Vector2(0, 700));
         }
 
+
+        sadLayerWeight = Mathf.Lerp(sadLayerWeight, World.Dimension == Dimensions.Red && !isGrounded ? 1 : 0, Time.deltaTime * 8);
+        dragWalkLayerWeight = Mathf.Lerp(dragWalkLayerWeight, World.Dimension == Dimensions.Red && isGrounded ? 1 : 0, Time.deltaTime * 8);
+
+        animator.SetLayerWeight(1, sadLayerWeight); //1 = Sad
+        animator.SetLayerWeight(2,dragWalkLayerWeight); // 2 = Sad Drag Walk
     }
+    float sadLayerWeight = 0;
+    float dragWalkLayerWeight = 0;
 
     public override void SetCheckpoint()
     {
