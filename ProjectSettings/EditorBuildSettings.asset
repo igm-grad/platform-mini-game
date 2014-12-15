@@ -6,6 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Levels/Tutorial - Jumping.unity
+  - enabled: 1
+    path: Assets/Scenes/Levels/Tutorial - Double Jumping.unity
+  - enabled: 1
     path: Assets/Scenes/Levels/Level3.unity
   - enabled: 1
     path: Assets/Scenes/Levels/Level4.unity
@@ -13,7 +17,3 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/Level5.unity
   - enabled: 1
     path: Assets/Scenes/Levels/Level2.unity
-  - enabled: 1
-    path: Assets/Scenes/Levels/Tutorial - Double Jumping.unity
-  - enabled: 1
-    path: Assets/Scenes/Levels/Tutorial - Jumping.unity
