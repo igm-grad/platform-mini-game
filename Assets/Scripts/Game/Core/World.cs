@@ -12,6 +12,8 @@ public class World {
 
     public static Dimensions Dimension { get; private set; }
 
+    public static bool IsColorFuckingBlind { get; set; }
+
     public static void Register(GameBehaviour behaviour)
     {
         Instance._Register(behaviour);
