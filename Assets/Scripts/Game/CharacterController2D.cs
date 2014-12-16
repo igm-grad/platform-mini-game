@@ -153,6 +153,10 @@ public class CharacterController2D : GameBehaviour {
 		{
 			World.LoadCheckpoint();
 		}
+        if (behaviour.GetType() == typeof(CollectableDoubleJump))
+        {
+            if (!DoubleJumpEnabled) DoubleJumpEnabled = true;
+        }
     }
 
 //    void OnDrawGizmos()
