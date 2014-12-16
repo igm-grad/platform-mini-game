@@ -35,4 +35,14 @@ public class FollowingShuriken : GameBehaviour {
 			meshContainer.transform.Translate(dir * 2 * Time.deltaTime); 
 		}
 	}
+
+    public void EnableMoving()
+    {
+        isActive = true;
+    }
+    public void DisableMoving()
+    {
+        isActive = false;
+    }
+
 }
