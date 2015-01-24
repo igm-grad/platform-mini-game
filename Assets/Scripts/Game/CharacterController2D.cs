@@ -86,14 +86,14 @@ public class CharacterController2D : GameBehaviour {
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             transform.parent = null;
 			rigidbody2D.WakeUp();
 			World.ShiftTo(Dimensions.Red);
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+		if (Input.GetKeyUp(KeyCode.LeftShift))
         {
 			transform.parent = null;
 			rigidbody2D.WakeUp();
@@ -101,7 +101,7 @@ public class CharacterController2D : GameBehaviour {
         }
 
 
-        if ((isGrounded || hasDoubleJump && DoubleJumpEnabled) && Input.GetKeyDown(KeyCode.UpArrow))
+        if ((isGrounded || hasDoubleJump && DoubleJumpEnabled) && Input.GetKeyDown(KeyCode.Space))
         {
             if (!isGrounded)
             {
