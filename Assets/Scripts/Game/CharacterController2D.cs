@@ -14,9 +14,11 @@ public class CharacterController2D : GameBehaviour {
     public float gripTime = .5f;
     public LayerMask groundLayers;
     public LayerMask wallLayers;
-    
-    readonly Vector2 feetA = new Vector2(-.23f,  .05f);
-    readonly Vector2 feetB = new Vector2( .23f, -.01f);
+
+    readonly Vector2 feetA = new Vector2(-.23f, .05f);
+    readonly Vector2 feetB = new Vector2(.23f, -.01f);
+    readonly Vector2 handA = new Vector2(.20f, .02f);
+    readonly Vector2 handB = new Vector2(.26f, .48f);
 
     Animator animator;
     bool isGrounded;
@@ -52,14 +54,26 @@ public class CharacterController2D : GameBehaviour {
             transform.parent = null;
         }
 
-        isGripping = !isGrounded && Physics2D.OverlapAreaNonAlloc(pos + feetA, pos + feetB, dumbColliders, wallLayers) > 0;
+        var mirror = new Vector2(-1, 1);
 
-        if ((isGrounded || isGripping) && DoubleJumpEnabled)
+        var isGrippingRight = Physics2D.OverlapAreaNonAlloc(pos + handA, pos + handB, dumbColliders, groundLayers) > 0;
+        var isGrippingLeft = Physics2D.OverlapAreaNonAlloc(pos + Vector2.Scale(handA, mirror), pos + Vector2.Scale(handB, mirror), dumbColliders, groundLayers) > 0;
+
+        if (isGrounded && DoubleJumpEnabled)
         {
             hasDoubleJump = true;
         }
 
-        var horizontal = Input.GetAxis("Horizontal");
+        var horizontal =  Input.GetAxis("Horizontal");
+        if (isGrippingRight)
+        {
+            horizontal = Mathf.Clamp(horizontal, float.NegativeInfinity, 0);
+        }
+
+        if (isGrippingLeft)
+        {
+            horizontal = Mathf.Clamp(horizontal, 0, float.PositiveInfinity);
+        }
 
         //var sign = Mathf.Sign(horizontal * transform.lossyScale.x);
         //var scale = new Vector3(transform.localScale.x * sign, transform.localScale.y, transform.localScale.z);
@@ -86,11 +100,12 @@ public class CharacterController2D : GameBehaviour {
     {
         base.Update();
 
-		if (Input.GetKeyDown(KeyCode.LeftShift))
+		//if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetButtonDown("Fire1"))
         {
             transform.parent = null;
 			rigidbody2D.WakeUp();
-			World.ShiftTo(Dimensions.Red);
+			World.ShiftDimension();
         }
 
 		if (Input.GetKeyUp(KeyCode.LeftShift))
@@ -102,6 +117,15 @@ public class CharacterController2D : GameBehaviour {
 
 
         if ((isGrounded || hasDoubleJump && DoubleJumpEnabled) && Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetButtonUp("Fire1"))
+        //{
+        //    transform.parent = null;
+        //    rigidbody2D.WakeUp();
+        //    World.ShiftTo(Dimensions.Green);
+        //}
+
+
+        if ((isGrounded || hasDoubleJump && DoubleJumpEnabled) && Input.GetButtonDown("Jump"))
         {
             if (!isGrounded)
             {
@@ -153,11 +177,15 @@ public class CharacterController2D : GameBehaviour {
 		{
 			World.LoadCheckpoint();
 		}
+        if (behaviour.GetType() == typeof(CollectableDoubleJump))
+        {
+            if (!DoubleJumpEnabled) DoubleJumpEnabled = true;
+        }
     }
 
-//    void OnDrawGizmos()
-//    {
-//        Gizmos.color = Color.magenta;
-//        Gizmos.DrawLine(transform.position + (Vector3)feetA, transform.position + (Vector3)feetB);
-//    }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(transform.position + (Vector3)handA + new Vector3(0, 0, -2), transform.position + (Vector3)handB + new Vector3(0, 0, -2));
+    }
 }

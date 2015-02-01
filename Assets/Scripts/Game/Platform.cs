@@ -12,10 +12,10 @@ public class Platform : GameBehaviour {
     public Sprite activeSprite;
     public Sprite inactiveSprite;
 
-    private Color Red = new Color(214 / 255.0f, 69 / 255.0f, 64 / 255.0f);
-    private Color Green = new Color(57 / 255.0f, 163 / 255.0f, 65 / 255.0f);
+    private Color Red { get { return World.IsColorFuckingBlind ? new Color(213 / 255.0f, 94 / 255.0f, 0 / 255.0f) : new Color(214 / 255.0f, 69 / 255.0f, 64 / 255.0f); } }
+    private Color Green { get { return World.IsColorFuckingBlind ? new Color(0 / 255.0f, 158 / 255.0f, 115 / 255.0f) : new Color(57 / 255.0f, 163 / 255.0f, 65 / 255.0f); } }
     private Color Both = new Color(59 / 255.0f, 99 / 255.0f, 161 / 255.0f);
-    private Color Yellow = new Color(236 / 255.0f, 211 / 255.0f, 67 / 255.0f);
+    private Color Yellow { get { return World.IsColorFuckingBlind ? new Color(236 / 255.0f, 211 / 255.0f, 67 / 255.0f) : new Color(240 / 255.0f, 228 / 255.0f, 66 / 255.0f); } }
 
     private GameObject meshContainer;
     private SpriteCover spriteCover;
