@@ -100,6 +100,7 @@ public class CharacterController2D : GameBehaviour {
     {
         base.Update();
 
+		//if (Input.GetKeyDown(KeyCode.LeftShift))
         if (Input.GetButtonDown("Fire1"))
         {
             transform.parent = null;
@@ -107,6 +108,15 @@ public class CharacterController2D : GameBehaviour {
 			World.ShiftDimension();
         }
 
+		if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+			transform.parent = null;
+			rigidbody2D.WakeUp();
+			World.ShiftTo(Dimensions.Green);
+        }
+
+
+        if ((isGrounded || hasDoubleJump && DoubleJumpEnabled) && Input.GetKeyDown(KeyCode.Space))
         //if (Input.GetButtonUp("Fire1"))
         //{
         //    transform.parent = null;

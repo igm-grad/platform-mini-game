@@ -3,6 +3,7 @@ using System.Collections;
 
 public class FollowingShurikenScript : MonoBehaviour {
 
+
 	// Use this for initialization
     void OnTriggerEnter2D(Collider2D coll)
     {
