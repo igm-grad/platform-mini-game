@@ -26,7 +26,7 @@ public class Platform : GameBehaviour {
     {
         base.Awake();
 
-        meshContainer = gameObject.FindChild("Mesh");
+		meshContainer = gameObject.FindChild("Mesh");
         spriteCover = gameObject.FindChild("Sprites").GetComponent<SpriteCover>();
     }
 
